@@ -17,4 +17,4 @@ class PatchEmployeeModel(EmployeeModel):
     is_active: Optional[bool] = False
 
     class Config:
-        orm_mode = True
+        orm_mode = True             ## To access the database
