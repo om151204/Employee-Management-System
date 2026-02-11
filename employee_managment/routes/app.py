@@ -40,9 +40,10 @@ def add_employee(request: EmployeeModel, db: Session = Depends(get_db)):
         return HTTPException(detail="Invalid contact", status_code=status.HTTP_400_BAD_REQUEST)
     if not check_salary(request.salary):
         return HTTPException(detail="Invalid salary", status_code=status.HTTP_400_BAD_REQUEST)
-    employee = Employee(name=request.name, email=request.email, department=request.department, salary=request.salary,
-                        phone_number=request.phone_number, is_active=request.is_active)
-    db.add(employee)
+    # employee = Employee(name=request.name, email=request.email, department=request.department, salary=request.salary,
+    #                     phone_number=request.phone_number, is_active=request.is_active)
+    employee = Employee(**request.model_dump())   # Request is pydantic model so model_dump converts it into dict which cannot
+    db.add(employee)                              # be passed directly to Employee so we need to unpack it which is done using **
     db.commit()
     db.refresh(employee)
     return employee
